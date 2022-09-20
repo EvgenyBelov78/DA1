@@ -4,9 +4,17 @@ select (case when grade>=8 then name else 'NULL' end) as name,grade, marks from
 (select name,marks, (select grade  from grades where marks>=min_mark and marks<=max_mark) as grade from students) qq order by grade desc,name,marks;
 --task2  (lesson9)
 -- oracle: https://www.hackerrank.com/challenges/occupations/problem
-with aa as (select occupation,name,(case occupation when 'Doctor' then 1 when 'Professor' then 2 when 'Singer' then 3 else 4 end) as sort,row_number() over (partition by occupation order by name ) as rn from occupations)
-select (select name from aa where sort=1 and rn=1),(select name from aa where sort=2 and rn=1),(select name from aa where sort=3 and rn=1),(select name from aa where sort=4 and rn=1) from aa
-where ;
+with a as (Select name,occupation,
+Row_number() over(partition by occupation order by name) as rn
+from occupations)
+select doc,prof,sing,act from
+(select distinct rn,
+(select name from a q where q.rn=a.rn and occupation='Doctor') as doc,
+(select name from a q where q.rn=a.rn and occupation='Professor') as prof,
+(select name from a q where q.rn=a.rn and occupation='Singer') as sing,
+(select name from a q where q.rn=a.rn and occupation='Actor') as act
+from a
+order by rn) qq;
 --task3  (lesson9)
 -- oracle: https://www.hackerrank.com/challenges/weather-observation-station-9/problem
 select distinct city /*, substr(city,1,1)*/ from station 
