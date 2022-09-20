@@ -1,0 +1,37 @@
+--task1  (lesson9)
+-- oracle: https://www.hackerrank.com/challenges/the-report/problem
+select (case when grade>=8 then name else 'NULL' end) as name,grade, marks from 
+(select name,marks, (select grade  from grades where marks>=min_mark and marks<=max_mark) as grade from students) qq order by grade desc,name,marks;
+--task2  (lesson9)
+-- oracle: https://www.hackerrank.com/challenges/occupations/problem
+with aa as (select occupation,name,(case occupation when 'Doctor' then 1 when 'Professor' then 2 when 'Singer' then 3 else 4 end) as sort,row_number() over (partition by occupation order by name ) as rn from occupations)
+select (select name from aa where sort=1 and rn=1),(select name from aa where sort=2 and rn=1),(select name from aa where sort=3 and rn=1),(select name from aa where sort=4 and rn=1) from aa
+where ;
+--task3  (lesson9)
+-- oracle: https://www.hackerrank.com/challenges/weather-observation-station-9/problem
+select distinct city /*, substr(city,1,1)*/ from station 
+where substr(city,1,1) not in ('A','E','U','O','I')
+order by city;
+--task4  (lesson9)
+-- oracle: https://www.hackerrank.com/challenges/weather-observation-station-10/problem
+select distinct city /*, substr(city,length(city),1)*/ from station 
+where upper(substr(city,length(city),1)) not in ('A','E','U','O','I')
+order by city;
+--task5  (lesson9)
+-- oracle: https://www.hackerrank.com/challenges/weather-observation-station-11/problem
+select distinct city /*, substr(city,length(city),1)*/ from station 
+where upper(substr(city,length(city),1)) not in ('A','E','U','O','I') or
+substr(city,1,1) not in ('A','E','U','O','I')
+order by city;
+--task6  (lesson9)
+-- oracle: https://www.hackerrank.com/challenges/weather-observation-station-12/problem
+select distinct city /*, substr(city,length(city),1)*/ from station 
+where upper(substr(city,length(city),1)) not in ('A','E','U','O','I') and
+substr(city,1,1) not in ('A','E','U','O','I');
+--task7  (lesson9)
+-- oracle: https://www.hackerrank.com/challenges/salary-of-employees/problem
+select name from employee
+where salary>2000 and months<10
+order by employee_id;
+--task8  (lesson9)
+-- oracle: https://www.hackerrank.com/challenges/the-report/problem
